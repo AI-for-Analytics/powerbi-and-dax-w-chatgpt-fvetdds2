@@ -45,7 +45,7 @@ DIVIDE([Income Index], [Price Index] * [Rate Index])
 
 great for trend charts
 
-6. If ChatGPT didn't already suggest it, make a monthly payment calculator.  Create this column rounded to 2 decimal places.
+5. If ChatGPT didn't already suggest it, make a monthly payment calculator.  Create this column rounded to 2 decimal places.
 
    This DAX based on:
 
@@ -68,6 +68,36 @@ ROUND(
     2
 )
 
-8. Now, make a month by month inventory pressure score.  For this score, 0 should represent a stable inventory, a positive number should mean inventory is growing, and a negative number should mean inventory is shrinking. Ask ChatGPT to consider the inventory level, the Home Sold, and the New Listings is this score. 
+6. Now, make a month by month inventory pressure score.  For this score, 0 should represent a stable inventory, a positive number should mean inventory is growing, and a negative number should mean inventory is shrinking. Ask ChatGPT to consider the inventory level, the Home Sold, and the New Listings is this score.
 
-9. We want to use DAX to create a new Date table that contains columns for Quarter and Quarter Year as well as a Month Year column to make a relationship with our existing tables. Create this table and then make a relationship between it and the other two tables. You can check that you have set it up correctly by creating a visualization using the date table for the X-axis and the affordability index for the Y-axis. You may need to create a new column in your Date table to sort by.
+a month-by-month Inventory Pressure Score will need the following information:
+
+1. Inventory level (snapshot supply)
+2. New Listings (incoming supply)
+3. Homes Sold (demand/absorption)
+
+And the interpretation should be:
+
+0 → stable market
+> 0 → inventory building (supply increasing)
+< 0 → inventory shrinking (demand > supply)
+
+Pressure = Supply change - demand
+
+Where: supply change = New listing
+       demand = Homes sold
+
+formula:
+Inventory Pressure Score =
+VAR NetFlow =
+    [New Listings] - [Homes Sold]
+
+VAR InventoryLevel =
+    [Inventory]
+
+RETURN
+ROUND(
+    DIVIDE(NetFlow, InventoryLevel),
+    4
+)
+7. We want to use DAX to create a new Date table that contains columns for Quarter and Quarter Year as well as a Month Year column to make a relationship with our existing tables. Create this table and then make a relationship between it and the other two tables. You can check that you have set it up correctly by creating a visualization using the date table for the X-axis and the affordability index for the Y-axis. You may need to create a new column in your Date table to sort by.
