@@ -47,6 +47,27 @@ great for trend charts
 
 6. If ChatGPT didn't already suggest it, make a monthly payment calculator.  Create this column rounded to 2 decimal places.
 
-7. Now, make a month by month inventory pressure score.  For this score, 0 should represent a stable inventory, a positive number should mean inventory is growing, and a negative number should mean inventory is shrinking. Ask ChatGPT to consider the inventory level, the Home Sold, and the New Listings is this score. 
+   This DAX based on:
 
-8. We want to use DAX to create a new Date table that contains columns for Quarter and Quarter Year as well as a Month Year column to make a relationship with our existing tables. Create this table and then make a relationship between it and the other two tables. You can check that you have set it up correctly by creating a visualization using the date table for the X-axis and the affordability index for the Y-axis. You may need to create a new column in your Date table to sort by.
+Loan amount = LoanAmount
+Interest rate is annual (as decimal, e.g. 0.065 for 6.5%)
+Loan term = 30 years (360 months)
+
+Monthly Payment =
+ROUND(
+    VAR Loan = [LoanAmount]
+    VAR MonthlyRate = [Average of MORTGAGE30US]
+    VAR Months = 360
+    VAR Payment =
+        Loan *
+        DIVIDE(
+            MonthlyRate * POWER(1 + MonthlyRate, Months),
+            POWER(1 + MonthlyRate, Months) - 1
+        )
+    RETURN Payment,
+    2
+)
+
+8. Now, make a month by month inventory pressure score.  For this score, 0 should represent a stable inventory, a positive number should mean inventory is growing, and a negative number should mean inventory is shrinking. Ask ChatGPT to consider the inventory level, the Home Sold, and the New Listings is this score. 
+
+9. We want to use DAX to create a new Date table that contains columns for Quarter and Quarter Year as well as a Month Year column to make a relationship with our existing tables. Create this table and then make a relationship between it and the other two tables. You can check that you have set it up correctly by creating a visualization using the date table for the X-axis and the affordability index for the Y-axis. You may need to create a new column in your Date table to sort by.
