@@ -100,4 +100,5 @@ ROUND(
     DIVIDE(NetFlow, InventoryLevel),
     4
 )
+
 7. We want to use DAX to create a new Date table that contains columns for Quarter and Quarter Year as well as a Month Year column to make a relationship with our existing tables. Create this table and then make a relationship between it and the other two tables. You can check that you have set it up correctly by creating a visualization using the date table for the X-axis and the affordability index for the Y-axis. You may need to create a new column in your Date table to sort by.
